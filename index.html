@@ -5,16 +5,27 @@
     <title>Content Tools Manager</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" type="text/css" href="style.css">
-
 </head>
 <body>
+    <div class="wrapper">
 
+        <div data-editable data-name=heading>
+            <h1 class="title">Title</h1>
+        </div>
+
+
+        <div data-editable data-name=content>
+            <p class="content">Write your text</p>
+        </div>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ContentTools@1.6.1/build/content-tools.min.js"></script>
 <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+</script>
+
 <script src="index.js"></script>
 </body>
 </html>
