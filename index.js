@@ -46,7 +46,7 @@ window.addEventListener('load', function() {
         xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-handler.php');
         xhr.send(payload);
     });
-});
+
 
 function imageUploader(dialog) {
     var image, xhr, xhrComplete, xhrProgress;
@@ -134,7 +134,7 @@ function imageUploader(dialog) {
         xhr.send(formData);
     });
 });
-}
+
 
 //rotate images
 function rotateImage(direction) {
@@ -261,4 +261,56 @@ dialog.addEventListener('imageuploader.save', function () {
     xhr.addEventListener('readystatechange', xhrComplete);
     xhr.open('POST', '/insert-image', true);
     xhr.send(formData);
+});
+
+function getImages() {
+    // Return an object containing image URLs and widths for all regions
+    var descendants, i, images;
+
+    images = {};
+    for (name in editor.regions()) {
+        // Search each region for images
+        descendants = editor.regions()[name].descendants();
+        for (i = 0; i < descendants.length; i++) {
+            // Filter out elements that are not images
+            if (descendants[i].type() !== 'Image') {
+                continue;
+            }
+            images[descendants[i].attr('src')] = descendants[i].size()[0];
+        }
+    }
+
+    return images;
+}
+
+editor.addEventListener('save', function (ev) {
+    var regions = ev.detail().regions;
+
+    // Collect the contents of each region into a FormData instance
+    payload = new FormData();
+    payload.append('page', window.location.pathname);
+    payload.append('images', JSON.stringify(getImages()));
+    payload.append('regions', JSON.stringify(regions));
+
+    // Send the updated content to the server to be saved
+    function onStateChange(ev) {
+        // Check if the request is finished
+        if (ev.target.readyState == 4) {
+            editor.busy(false);
+            if (status == '200') {
+                // Save was successful, notify the user with a flash
+                new ContentTools.FlashUI('ok');
+            } else {
+                // Save failed, notify the user with a flash
+                new ContentTools.FlashUI('no');
+            }
+        }
+    };
+
+    xhr = new XMLHttpRequest();
+    xhr.addEventListener('readystatechange', onStateChange);
+    xhr.open('POST', '/x/save-page');
+    xhr.send(payload);
+});
+}
 });
