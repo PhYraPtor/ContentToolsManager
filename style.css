@@ -36,3 +36,26 @@
 [data-editable] .text-right {
     text-align: right;
 }
+
+.wrapper {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 15px;
+}
+
+.title {
+    display: block;
+    width: 100%;
+    border: solid 2px #aaa;
+    padding: 5px;
+}
+
+.content {
+    display: block;
+    width: 100%;
+    min-height: 500px;
+    border: solid 2px #aaa;
+    padding: 5px;
+}
