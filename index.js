@@ -2,6 +2,7 @@ window.addEventListener('load', function() {
     var editor;
     editor = ContentTools.EditorApp.get();
     editor.init('*[data-editable]', 'data-name');
+    editor.IMAGE_UPLOADER = imageUploader;
 
     editor.addEventListener('saved', function (ev) {
         var name, payload, regions, xhr;
@@ -52,19 +53,19 @@ function imageUploader(dialog) {
     var image, xhr, xhrComplete, xhrProgress;
 
    // Set up the event handlers
-   dialog.addEventListener('imageuploader.cancelupload', function () {
-    // Cancel the current upload
+    dialog.addEventListener('imageuploader.cancelupload', function () {
+        // Cancel the current upload
 
-    // Stop the upload
-    if (xhr) {
-        xhr.upload.removeEventListener('progress', xhrProgress);
-        xhr.removeEventListener('readystatechange', xhrComplete);
-        xhr.abort();
-    }
+        // Stop the upload
+        if (xhr) {
+            xhr.upload.removeEventListener('progress', xhrProgress);
+            xhr.removeEventListener('readystatechange', xhrComplete);
+            xhr.abort();
+        }
 
-    // Set the dialog to empty
-    dialog.state('empty');
-
+        // Set the dialog to empty
+        dialog.state('empty');
+    });
 
     dialog.addEventListener('imageuploader.clear', function () {
         // Clear the current image
@@ -72,7 +73,6 @@ function imageUploader(dialog) {
         image = null;
     });
 
-//upload
     dialog.addEventListener('imageuploader.fileready', function (ev) {
 
         // Upload a file to the server
@@ -107,7 +107,7 @@ function imageUploader(dialog) {
                 image = {
                     size: response.size,
                     url: response.url
-                    };
+                };
 
                 // Populate the dialog
                 dialog.populate(image.url, image.size);
@@ -130,187 +130,131 @@ function imageUploader(dialog) {
         xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('progress', xhrProgress);
         xhr.addEventListener('readystatechange', xhrComplete);
-        xhr.open('POST', '/upload-image', true);
+        xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-image-upload.php', true);
         xhr.send(formData);
     });
-});
 
+    function rotateImage(direction) {
+        // Request a rotated version of the image from the server
+        var formData;
 
-//rotate images
-function rotateImage(direction) {
-    // Request a rotated version of the image from the server
-    var formData;
+        // Define a function to handle the request completion
+        xhrComplete = function (ev) {
+            var response;
 
-    // Define a function to handle the request completion
-    xhrComplete = function (ev) {
-        var response;
+            // Check the request is complete
+            if (ev.target.readyState != 4) {
+                return;
+            }
 
-        // Check the request is complete
-        if (ev.target.readyState != 4) {
-            return;
-        }
+            // Clear the request
+            xhr = null
+            xhrComplete = null
 
-        // Clear the request
-        xhr = null
-        xhrComplete = null
+            // Free the dialog from its busy state
+            dialog.busy(false);
 
-        // Free the dialog from its busy state
-        dialog.busy(false);
+            // Handle the result of the rotation
+            if (parseInt(ev.target.status) == 200) {
+                // Unpack the response (from JSON)
+                response = JSON.parse(ev.target.responseText);
 
-        // Handle the result of the rotation
-        if (parseInt(ev.target.status) == 200) {
-            // Unpack the response (from JSON)
-            response = JSON.parse(ev.target.responseText);
-
-            // Store the image details (use fake param to force refresh)
-            image = {
-                size: response.size,
-                url: response.url + '?_ignore=' + Date.now()
+                // Store the image details (use fake param to force refresh)
+                image = {
+                    size: response.size,
+                    url: response.url + '?_ignore=' + Date.now()
                 };
 
-            // Populate the dialog
-            dialog.populate(image.url, image.size);
+                // Populate the dialog
+                dialog.populate(image.url, image.size);
 
-        } else {
-            // The request failed, notify the user
-            new ContentTools.FlashUI('no');
-        }
-    }
-
-    // Set the dialog to busy while the rotate is performed
-    dialog.busy(true);
-
-    // Build the form data to post to the server
-    formData = new FormData();
-    formData.append('url', image.url);
-    formData.append('direction', direction);
-
-    // Make the request
-    xhr = new XMLHttpRequest();
-    xhr.addEventListener('readystatechange', xhrComplete);
-    xhr.open('POST', '/rotate-image', true);
-    xhr.send(formData);
-}
-
-dialog.addEventListener('imageuploader.rotateccw', function () {
-    rotateImage('CCW');
-});
-
-dialog.addEventListener('imageuploader.rotatecw', function () {
-    rotateImage('CW');
-});
-
-//save
-
-dialog.addEventListener('imageuploader.save', function () {
-    var crop, cropRegion, formData;
-
-    // Define a function to handle the request completion
-    xhrComplete = function (ev) {
-        // Check the request is complete
-        if (ev.target.readyState !== 4) {
-            return;
-        }
-
-        // Clear the request
-        xhr = null
-        xhrComplete = null
-
-        // Free the dialog from its busy state
-        dialog.busy(false);
-
-        // Handle the result of the rotation
-        if (parseInt(ev.target.status) === 200) {
-            // Unpack the response (from JSON)
-            var response = JSON.parse(ev.target.responseText);
-
-            // Trigger the save event against the dialog with details of the
-            // image to be inserted.
-            dialog.save(
-                response.url,
-                response.size,
-                {
-                    'alt': response.alt,
-                    'data-ce-max-width': response.size[0]
-                });
-
-        } else {
-            // The request failed, notify the user
-            new ContentTools.FlashUI('no');
-        }
-    }
-
-    // Set the dialog to busy while the rotate is performed
-    dialog.busy(true);
-
-    // Build the form data to post to the server
-    formData = new FormData();
-    formData.append('url', image.url);
-
-    // Set the width of the image when it's inserted, this is a default
-    // the user will be able to resize the image afterwards.
-    formData.append('width', 600);
-
-    // Check if a crop region has been defined by the user
-    if (dialog.cropRegion()) {
-        formData.append('crop', dialog.cropRegion());
-    }
-
-    // Make the request
-    xhr = new XMLHttpRequest();
-    xhr.addEventListener('readystatechange', xhrComplete);
-    xhr.open('POST', '/insert-image', true);
-    xhr.send(formData);
-});
-
-function getImages() {
-    // Return an object containing image URLs and widths for all regions
-    var descendants, i, images;
-
-    images = {};
-    for (name in editor.regions()) {
-        // Search each region for images
-        descendants = editor.regions()[name].descendants();
-        for (i = 0; i < descendants.length; i++) {
-            // Filter out elements that are not images
-            if (descendants[i].type() !== 'Image') {
-                continue;
-            }
-            images[descendants[i].attr('src')] = descendants[i].size()[0];
-        }
-    }
-
-    return images;
-}
-
-editor.addEventListener('save', function (ev) {
-    var regions = ev.detail().regions;
-
-    // Collect the contents of each region into a FormData instance
-    payload = new FormData();
-    payload.append('page', window.location.pathname);
-    payload.append('images', JSON.stringify(getImages()));
-    payload.append('regions', JSON.stringify(regions));
-
-    // Send the updated content to the server to be saved
-    function onStateChange(ev) {
-        // Check if the request is finished
-        if (ev.target.readyState == 4) {
-            editor.busy(false);
-            if (status == '200') {
-                // Save was successful, notify the user with a flash
-                new ContentTools.FlashUI('ok');
             } else {
-                // Save failed, notify the user with a flash
+                // The request failed, notify the user
                 new ContentTools.FlashUI('no');
             }
         }
-    };
 
-    xhr = new XMLHttpRequest();
-    xhr.addEventListener('readystatechange', onStateChange);
-    xhr.open('POST', '/x/save-page');
-    xhr.send(payload);
-});
+        // Set the dialog to busy while the rotate is performed
+        dialog.busy(true);
+
+        // Build the form data to post to the server
+        formData = new FormData();
+        formData.append('url', image.url);
+        formData.append('direction', direction);
+
+        // Make the request
+        xhr = new XMLHttpRequest();
+        xhr.addEventListener('readystatechange', xhrComplete);
+        xhr.open('POST', '/rotate-image', true);
+        xhr.send(formData);
+    }
+    dialog.addEventListener('imageuploader.rotateccw', function () {
+        rotateImage('CCW');
+    });
+    dialog.addEventListener('imageuploader.rotatecw', function () {
+        rotateImage('CW');
+    });
+
+    dialog.addEventListener('imageuploader.save', function () {
+        var crop, cropRegion, formData;
+
+        // Define a function to handle the request completion
+        xhrComplete = function (ev) {
+            // Check the request is complete
+            if (ev.target.readyState !== 4) {
+                return;
+            }
+
+            // Clear the request
+            xhr = null
+            xhrComplete = null
+
+            // Free the dialog from its busy state
+            dialog.busy(false);
+
+            // Handle the result of the rotation
+            if (parseInt(ev.target.status) === 200) {
+                // Unpack the response (from JSON)
+                var response = JSON.parse(ev.target.responseText);
+
+                // Trigger the save event against the dialog with details of the
+                // image to be inserted.
+                dialog.save(
+                    response.url,
+                    response.size,
+                    {
+                        'alt': response.alt,
+                        'data-ce-max-width': response.size[0]
+                    });
+
+            } else {
+                // The request failed, notify the user
+                new ContentTools.FlashUI('no');
+            }
+        }
+
+        // Set the dialog to busy while the rotate is performed
+        dialog.busy(true);
+
+        // Build the form data to post to the server
+        formData = new FormData();
+        formData.append('url', image.url);
+
+        // Set the width of the image when it's inserted, this is a default
+        // the user will be able to resize the image afterwards.
+        formData.append('width', 600);
+
+        // Check if a crop region has been defined by the user
+        if (dialog.cropRegion()) {
+            formData.append('crop', dialog.cropRegion());
+        }
+
+        // Make the request
+        xhr = new XMLHttpRequest();
+        xhr.addEventListener('readystatechange', xhrComplete);
+        xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-image-upload.php', true);
+        xhr.send(formData);
+    });
+
 }
 });
