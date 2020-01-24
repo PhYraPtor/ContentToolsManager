@@ -2,7 +2,7 @@ window.addEventListener('load', function() {
     var editor;
     editor = ContentTools.EditorApp.get();
     editor.init('*[data-editable]', 'data-name');
-    editor.IMAGE_UPLOADER = imageUploader;
+    ContentTools.IMAGE_UPLOADER = imageUploader;
 
     editor.addEventListener('saved', function (ev) {
         var name, payload, regions, xhr;
@@ -44,7 +44,7 @@ window.addEventListener('load', function() {
 
         xhr = new XMLHttpRequest();
         xhr.addEventListener('readystatechange', onStateChange);
-        xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-handler.php');
+        xhr.open('POST', 'http://ctm.robinoger.com/ctm-handler.php');
         xhr.send(payload);
     });
 
@@ -103,6 +103,7 @@ function imageUploader(dialog) {
                 // Unpack the response (from JSON)
                 response = JSON.parse(ev.target.responseText);
 
+                console.log(response);
                 // Store the image details
                 image = {
                     size: response.size,
@@ -125,12 +126,13 @@ function imageUploader(dialog) {
         // Build the form data to post to the server
         formData = new FormData();
         formData.append('image', file);
+        formData.append('page',"home");
 
         // Make the request
         xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('progress', xhrProgress);
         xhr.addEventListener('readystatechange', xhrComplete);
-        xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-image-upload.php', true);
+        xhr.open('POST', 'http://ctm.robinoger.com/ctm-image-upload.php', true);
         xhr.send(formData);
     });
 
@@ -217,6 +219,8 @@ function imageUploader(dialog) {
                 // Unpack the response (from JSON)
                 var response = JSON.parse(ev.target.responseText);
 
+                console.log(response);
+
                 // Trigger the save event against the dialog with details of the
                 // image to be inserted.
                 dialog.save(
@@ -236,23 +240,26 @@ function imageUploader(dialog) {
         // Set the dialog to busy while the rotate is performed
         dialog.busy(true);
 
+        console.log(image.url);
+
         // Build the form data to post to the server
         formData = new FormData();
-        formData.append('url', image.url);
+        formData.append('img_url', image.url);
 
         // Set the width of the image when it's inserted, this is a default
         // the user will be able to resize the image afterwards.
-        formData.append('width', 600);
+        formData.append('img_max_width', 600);
 
         // Check if a crop region has been defined by the user
         if (dialog.cropRegion()) {
-            formData.append('crop', dialog.cropRegion());
+            formData.append('img_crop', dialog.cropRegion());
+            console.log(dialog.cropRegion());
         }
 
         // Make the request
         xhr = new XMLHttpRequest();
         xhr.addEventListener('readystatechange', xhrComplete);
-        xhr.open('POST', 'http://ctm.phoque-yuman.fr/ctm-image-upload.php', true);
+        xhr.open('POST', 'http://ctm.robinoger.com/ctm-imageupdate.php', true);
         xhr.send(formData);
     });
 
