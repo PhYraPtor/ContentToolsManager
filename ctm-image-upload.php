@@ -7,20 +7,50 @@ error_reporting(E_ALL & ~E_NOTICE);
 // HTML file type restriction can still miss at times
 // @TODO - Add more of your own file checks if you want.
 // E.g. Restrict upload size to prevent resource hogging.
-if (isset($_FILES['image']['tmp_name'])) {
+if (isset($_FILES['image']['tmp_name']) && isset($_POST['page'])) {
     $allowed = ["bmp", "gif", "jpg", "jpeg", "png", "webp"];
     $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
     if (in_array($ext, $allowed)) {
-        $source = $_FILES["image"]["tmp_name"];
-        $destination = $_FILES["image"]["name"];
-        move_uploaded_file($source, $destination);
-        header('Content-Type: application/json');
-        echo json_encode([
-            "status" => 200,
-            "message" => "File Uploaded",
-            "url" => $destination,
-            "size" => getimagesize($_FILES["image"]["name"])
-        ]);
+        try {
+            // $source = $_FILES["image"]["tmp_name"];
+            // $destination = $_SERVER['REQUEST_URI'] . '/' . $_FILES["image"]["name"];
+            // $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/';
+            // move_uploaded_file($source, $destination);
+
+            $dbh = new PDO('mysql:host=robinoelou.mysql.db;dbname=robinoelou', 'robinoelou', '87HsEKcf9LAHTfM');
+            $r = 'INSERT INTO images (size) VALUES (?)';
+            $stmt= $dbh->prepare($r);
+            $stmt->execute([$_POST['size']]);
+            $imgId = $dbh->lastInsertId();
+
+            $source = $_FILES["image"]["tmp_name"];
+            $destination = $_SERVER['REQUEST_URI'] . '/' . $imgId;
+
+            // @todo : faire le nom du dossier
+
+            move_uploaded_file($source, $destination);
+
+            $r = 'UPDATE images SET (url = ?) WHERE id = ?';
+            $stmt = $dbh->prepare($r);
+            $stmt->execute([$destination, $imgId]);
+
+            // Réponse
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                "status" => 200,
+                "message" => "File Uploaded",
+                "url" => $link . $destination,
+                "size" => getimagesize($_FILES["image"]["name"])
+            ]);
+        }
+        catch (PDOException $e) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                "status" => 500,
+                "message" => "Impossible de se connecter à la db : ".$e
+            ]);
+        }
     } else {
         header('Content-Type: application/json');
         echo json_encode([

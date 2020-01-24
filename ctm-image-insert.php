@@ -12,7 +12,7 @@ if(isset($_POST)){
         header('Content-Type: application/json');
         echo json_encode([
             "status" => 500,
-            "message" => "Impossible de se conencter à la db : ".$e
+            "message" => "Impossible de se connecter à la db : ".$e
         ]);
     }
     header('Content-Type: application/json');
