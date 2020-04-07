@@ -218,10 +218,6 @@ function imageUploader(dialog) {
                 // Unpack the response (from JSON)
                 var response = JSON.parse(ev.target.responseText);
 
-                if (!response.alt){
-                    response.alt = prompt("Quel est la description de l'image");
-                }
-
                 response.size = JSON.parse("[" + response.size + "]");
 
                 // Trigger the save event against the dialog with details of the
@@ -256,6 +252,10 @@ function imageUploader(dialog) {
         if (dialog.cropRegion()) {
             formData.append('img_crop', dialog.cropRegion());
         }
+
+        var alt= prompt("Quel est la description de l'image ?");
+        formData.append('img_alt', alt);
+
 
 
         // Make the request
