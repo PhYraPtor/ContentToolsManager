@@ -25,7 +25,6 @@ window.addEventListener('load', function() {
             }
         }
 
-        console.log(payload);
 
         // Send the update content to the server to be saved
         function onStateChange(ev) {
@@ -103,11 +102,11 @@ function imageUploader(dialog) {
                 // Unpack the response (from JSON)
                 response = JSON.parse(ev.target.responseText);
 
-                console.log(response);
                 // Store the image details
                 image = {
                     size: response.size,
-                    url: response.url
+                    url: response.url,
+                    id: response.id
                 };
 
                 // Populate the dialog
@@ -219,16 +218,20 @@ function imageUploader(dialog) {
                 // Unpack the response (from JSON)
                 var response = JSON.parse(ev.target.responseText);
 
-                console.log(response);
+                if (!response.alt){
+                    response.alt = prompt("Quel est la description de l'image");
+                }
+
+                response.size = JSON.parse("[" + response.size + "]");
 
                 // Trigger the save event against the dialog with details of the
                 // image to be inserted.
                 dialog.save(
                     response.url,
-                    response.size,
+                    response.size[0],
                     {
                         'alt': response.alt,
-                        'data-ce-max-width': response.size[0]
+                        'data-ce-max-width': response.size[0][0]
                     });
 
             } else {
@@ -240,11 +243,10 @@ function imageUploader(dialog) {
         // Set the dialog to busy while the rotate is performed
         dialog.busy(true);
 
-        console.log(image.url);
 
         // Build the form data to post to the server
         formData = new FormData();
-        formData.append('img_url', image.url);
+        formData.append('img_id', image.id);
 
         // Set the width of the image when it's inserted, this is a default
         // the user will be able to resize the image afterwards.
@@ -253,13 +255,13 @@ function imageUploader(dialog) {
         // Check if a crop region has been defined by the user
         if (dialog.cropRegion()) {
             formData.append('img_crop', dialog.cropRegion());
-            console.log(dialog.cropRegion());
         }
+
 
         // Make the request
         xhr = new XMLHttpRequest();
         xhr.addEventListener('readystatechange', xhrComplete);
-        xhr.open('POST', 'http://ctm.robinoger.com/ctm-imageupdate.php', true);
+        xhr.open('POST', 'http://ctm.robinoger.com/ctm-image-update.php', true);
         xhr.send(formData);
     });
 
