@@ -1,6 +1,4 @@
 <?php
-// (1) INIT
-// @TODO - Handle the $_POST vars if you have any
 error_reporting(E_ALL & ~E_NOTICE);
 
 // (2) FILE CHECK

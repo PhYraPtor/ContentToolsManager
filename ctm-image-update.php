@@ -33,19 +33,19 @@ if (isset($_POST['img_id']) && !empty($_POST['img_id'])) {
             $new_width = ($width * $crop[3]) - $new_x;
             $cropped_img = imagecrop($image, ['x' => $new_x, 'y' => $new_y, 'width' => $new_width, 'height' => $new_height]);
 
-            if($cropped_img !== FALSE) {
+            if ($cropped_img !== FALSE) {
                 switch($img_type) {
                     case 1:
-                        $image = imagegif($cropped_img, 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.gif');
-                        $url = 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.gif';
+                        $image = imagegif($cropped_img, './images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.gif');
+                        $url = 'images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.gif';
                         break;
                     case 2:
-                        $image = imagejpeg($cropped_img, 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.jpg');
-                        $url = 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.jpg';
+                        $image = imagejpeg($cropped_img, './images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.jpg');
+                        $url = 'images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.jpg';
                         break;
                     case 3:
-                        $image = imagepng($cropped_img, 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.png');
-                        $url = 'http://ctm.robinoger.com/'.$imageInDb[0]['id'].'-cropped.png';
+                        $image = imagepng($cropped_img, './images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.png');
+                        $url = 'images/'.$_POST['page'].'/'.$imageInDb[0]['id'].'-cropped.png';
                         break;
                     default:
                         die();
@@ -53,8 +53,14 @@ if (isset($_POST['img_id']) && !empty($_POST['img_id'])) {
                 }
                 if ($image) {
                     try {
-                        $r = $dbh->prepare('INSERT INTO images(url, size, alt, max_width, original_name, crop_id) VALUES (?,?,?,?,?,?)');
-                        $r->execute([$url, $imageInDb[0]['size'], $_POST['img_alt'], 0, $imageInDb[0]['original_name'], $imageInDb[0]['id']]);
+                        $r = $dbh->prepare('INSERT INTO images(url, size, alt, original_name, original_id) VALUES (?,?,?,?,?)');
+                        $r->execute([$url, $imageInDb[0]['size'], $_POST['img_alt'], $imageInDb[0]['original_name'], $imageInDb[0]['id']]);
+                        echo json_encode([
+                            "status" => 200,
+                            "url" => 'http://ctm.robinoger.com/'.$url,
+                            "alt" => $_POST['img_alt'],
+                            "size" => $imageInDb[0]['size']
+                        ]);
                     }
                     catch (PDOException $e) {
                         echo json_encode([
@@ -64,15 +70,6 @@ if (isset($_POST['img_id']) && !empty($_POST['img_id'])) {
                         die();
                     }
                 }
-                echo json_encode([
-                    "status" => 200,
-                    "message" => "Crop",
-                    "valeur" => $_POST['img_crop'],
-                    "image" => $imageInDb,
-                    "size" => $imageInDb[0]['size'],
-                    "url" => 'http://ctm.robinoger.com/'.$imageInDb[0]['url'],
-                    "dansleif" => "OUI"
-                ]);
             } else {
                 echo json_encode([
                     "status" => 500,
@@ -81,7 +78,6 @@ if (isset($_POST['img_id']) && !empty($_POST['img_id'])) {
                     "image" => $imageInDb,
                     "size" => $imageInDb[0]['size'],
                     "url" => 'http://ctm.robinoger.com/'.$imageInDb[0]['url'],
-                    "dansleif" => "NON"
                 ]);
             }
             imagedestroy($cropped_img);
