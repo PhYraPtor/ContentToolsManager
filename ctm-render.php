@@ -12,7 +12,11 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
                 // Vue de la page en dev
                 $r = $dbh->prepare('SELECT * FROM fields_dev WHERE page = ? ORDER BY updated DESC');
                 $r->execute([$pageId]);
-                $fields = $r->fetchAll();
+                $fieldsResults = $r->fetchAll();
+                $fields = array();
+                foreach ($fieldsResults as $field) {
+                    $fields[$field['field']] = $field['content'];
+                }
                 print_r($fields);
             } else {
                 // La page en prod
