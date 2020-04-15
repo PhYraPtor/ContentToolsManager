@@ -18,12 +18,22 @@ window.addEventListener('load', function() {
 
         // Collect the contents of each region into a FormData instance
         payload = new FormData();
+        var arr = [];
         for (name in regions) {
             if (regions.hasOwnProperty(name)) {
                 console.log("La région s'appelle : " + name + " et la valeur est : " + regions[name]);
-                payload.append(name, regions[name]);
+                arr.push(JSON.stringify({
+                    nomDuChamp : name,
+                    valeur : regions[name]
+                }));
+                console.log(arr);
             }
         }
+
+        payload.append("page", "home");
+
+        payload.append("data", JSON.stringify(arr));
+
 
 
         // Send the update content to the server to be saved
@@ -33,6 +43,8 @@ window.addEventListener('load', function() {
                 editor.busy(false);
                 if (ev.target.status == '200') {
                     // Save was successful, notify the user with a flash
+                    console.log(JSON.parse(ev.target.responseText));
+
                     new ContentTools.FlashUI('ok');
                 } else {
                     // Save failed, notify the user with a flash
@@ -43,7 +55,7 @@ window.addEventListener('load', function() {
 
         xhr = new XMLHttpRequest();
         xhr.addEventListener('readystatechange', onStateChange);
-        xhr.open('POST', 'http://ctm.robinoger.com/ctm-handler.php');
+        xhr.open('POST', 'http://ctm.robinoger.com/ctm-save-post.php');
         xhr.send(payload);
     });
 
@@ -216,10 +228,12 @@ function imageUploader(dialog) {
             // Handle the result of the rotation
             if (parseInt(ev.target.status) === 200) {
                 // Unpack the response (from JSON)
+                console.log(ev.target.responseText);
                 var response = JSON.parse(ev.target.responseText);
+                console.log(response);
 
                 response.size = JSON.parse("[" + response.size + "]");
-
+                
                 // Trigger the save event against the dialog with details of the
                 // image to be inserted.
                 dialog.save(
@@ -255,6 +269,9 @@ function imageUploader(dialog) {
 
         var alt= prompt("Quel est la description de l'image ?");
         formData.append('img_alt', alt);
+
+
+        formData.append('page',"home");
 
 
 
