@@ -1,0 +1,33 @@
+body {
+    overflow: hidden;
+}
+.login-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content:center;
+    align-items: center;
+    height: 100vh;
+}
+.login-form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    background: #d8d8d8;
+    border-radius: 6px;
+    box-shadow: 0 5px 13px rgba(1, 1, 1, 0.5);
+}
+
+.login-form input {
+    font-size: 1.5em;
+    margin: 0.3em 0;
+    border: none;
+    padding: 0 .5em;
+}
+
+.login-form input[type="submit"] {
+    background: white;
+    border: none;
+    border-radius: 6px;
+}
