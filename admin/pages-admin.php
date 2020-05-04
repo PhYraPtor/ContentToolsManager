@@ -2,7 +2,7 @@
 $dbh = new PDO('mysql:host=robinoelou.mysql.db;dbname=robinoelou', 'robinoelou', '87HsEKcf9LAHTfM');
 $r = $dbh->prepare('SELECT * FROM pages');
 $r->execute();
-$res = $r->fetchAll();
+$pages = $r->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -13,8 +13,32 @@ $res = $r->fetchAll();
 	<title>Administration des pages</title>
 </head>
 <body>
-<?php
-    print_r($res)
-?>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Titre</th>
+        <th>Template</th>
+        <th>Créé</th>
+        <th>Modifié</th>
+        <th>Éditer</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach($pages as $page) {
+        echo '<tr>';
+            echo'<td>'.$page['id'].'</td>';
+            echo'<td>'.$page['title'].'</td>';
+            echo'<td>'.$page['template'].'</td>';
+            echo'<td>'.$page['created'].'</td>';
+            echo'<td>'.$page['modified'].'</td>';
+            echo'<td><a href="edit-page-settings.php?id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '">Modifier</a></td>';
+        echo '</tr>';
+    }
+    ?>
+    </tbody>
+</table>
+
 </body>
 </html>
