@@ -1,3 +1,18 @@
+function $_GET(param) {
+    var vars = {};
+    window.location.href.replace( location.hash, '' ).replace(
+        /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+        function( m, key, value ) { // callback
+            vars[key] = value !== undefined ? value : '';
+        }
+    );
+
+    if ( param ) {
+        return vars[param] ? vars[param] : null;
+    }
+    return vars;
+}
+
 window.addEventListener('load', function() {
     var editor;
     editor = ContentTools.EditorApp.get();
@@ -30,7 +45,7 @@ window.addEventListener('load', function() {
             }
         }
 
-        payload.append("page", "portfolio");
+        payload.append("page", $_GET('page'));
 
         payload.append("data", JSON.stringify(arr));
 
@@ -137,7 +152,7 @@ function imageUploader(dialog) {
         // Build the form data to post to the server
         formData = new FormData();
         formData.append('image', file);
-        formData.append('page',"portfolio");
+        formData.append('page',$_GET('page'));
 
         // Make the request
         xhr = new XMLHttpRequest();
@@ -271,7 +286,7 @@ function imageUploader(dialog) {
         formData.append('img_alt', alt);
 
 
-        formData.append('page',"portfolio");
+        formData.append('page',$_GET('page'));
 
 
 
