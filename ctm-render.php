@@ -10,17 +10,18 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
             $pageId = $pageId[0]['id'];
             if (isset($_GET['preview']) && $_GET['preview'] == 'true') {
                 // Vue de la page en dev
-                $r = $dbh->prepare('SELECT * FROM fields_dev WHERE page = ? ORDER BY updated DESC');
-                $r->execute([$pageId]);
-                $fieldsResults = $r->fetchAll();
-                $fields = array();
-                foreach ($fieldsResults as $field) {
-                    $fields[$field['field']] = $field['content'];
-                }
-                print_r($fields);
-            } else {
-                // La page en prod
             }
+            $r = $dbh->prepare('SELECT * FROM fields_dev WHERE page = ? ORDER BY updated DESC');
+            $r->execute([$pageId]);
+            $fieldsResults = $r->fetchAll();
+            $fields = array();
+            foreach ($fieldsResults as $field) {
+                $fields[$field['field']] = $field['content'];
+            }
+            $page_html = file_get_contents('./test/index.html');
+            print_r($fields);
+            echo('page' . $page_html);
+
         } else {
             echo 'La page n\'existe pas.';
         }
