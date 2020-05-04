@@ -23,8 +23,8 @@ Paradigm Shift by HTML5 UP
           content="Etudiant à Digital Campus Lyon,je suis aussi amateur de webdesign, développement et photographie !">
     <meta name="author" content="Antoine Bonin">
     <link rel="stylesheet" href="../../assets/css/main.css"/>
-    <link rel="stylesheet" type="../../assets/css/style.css">
-    <link rel="stylesheet" type="../../assets/css/content-tools/content-tools.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/content-tools/content-tools.css">
     <!--link rel="stylesheet" type="text/css" href="../style.css"-->
     <script src="https://kit.fontawesome.com/5a25629c5a.js"></script>
 </head>
