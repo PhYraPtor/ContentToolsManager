@@ -1,4 +1,13 @@
+<?php
 
+$dev = true;
+
+function editable(){
+        if (isset($dev) && $dev == true) {
+            echo "data-editable";
+        }
+}
+?>
 <!DOCTYPE HTML>
 <!--
 Paradigm Shift by HTML5 UP
@@ -54,10 +63,10 @@ window.dataLayer = window.dataLayer || [];
 				<!-- Intro -->
 					<section class="intro">
 						<header>
-							<div data-editable data-name="name">
+							<div <? editable() ?> data-name="name">
 								<?php echo($fields['name']) ?>
 							</div>
-							<div data-editable data-name="introduction">
+							<div <? editable() ?> data-name="introduction">
                                 <?php echo($fields['introduction']) ?>
 							</div>
 							<ul class="actions">
