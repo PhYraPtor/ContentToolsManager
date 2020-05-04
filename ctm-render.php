@@ -18,9 +18,8 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
             foreach ($fieldsResults as $field) {
                 $fields[$field['field']] = $field['content'];
             }
-            $page_html = file_get_contents('./test/index.html');
             print_r($fields);
-            echo('page' . $page_html);
+            include('./templates/home.php');
 
         } else {
             echo 'La page n\'existe pas.';

@@ -1,6 +1,4 @@
-<?php
-    $result = //SELECT DATABASE
-?>
+
 <!DOCTYPE HTML>
 <!--
 Paradigm Shift by HTML5 UP
@@ -57,10 +55,10 @@ window.dataLayer = window.dataLayer || [];
 					<section class="intro">
 						<header>
 							<div data-editable data-name="name">
-								<?php echo($result['name']) ?>
+								<?php echo($fields['name']) ?>
 							</div>
 							<div data-editable data-name="introduction">
-                                <?php echo($result['introduction']) ?>
+                                <?php echo($fields['introduction']) ?>
 							</div>
 							<ul class="actions">
 								<li><a href="#first" class="arrow scrolly"><span class="label">Suivant</span></a></li>
