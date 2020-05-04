@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
             }
         }
 
-        payload.append("page", "home");
+        payload.append("page", "portfolio");
 
         payload.append("data", JSON.stringify(arr));
 
@@ -137,7 +137,7 @@ function imageUploader(dialog) {
         // Build the form data to post to the server
         formData = new FormData();
         formData.append('image', file);
-        formData.append('page',"home");
+        formData.append('page',"portfolio");
 
         // Make the request
         xhr = new XMLHttpRequest();
@@ -271,7 +271,7 @@ function imageUploader(dialog) {
         formData.append('img_alt', alt);
 
 
-        formData.append('page',"home");
+        formData.append('page',"portfolio");
 
 
 
