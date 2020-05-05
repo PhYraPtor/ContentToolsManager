@@ -6,9 +6,14 @@ if (isset($_SESSION['userid']) && !empty($_SESSION['userid'])) {
     $user_mail = $_SESSION['mail'];
     $user_name = $_SESSION['username'];
     $user_role = $_SESSION['role'];
+    if (isset($_GET['view'])) {
+        $view = $_GET['view'];
+    } else {
+        $view = 'admin-main';
+    }
 
     include('./templates/admin-header.php');
-    include('./templates/admin-main.php');
+    include('./templates/views/'.$view.'.php');
     include('./templates/admin-footer.php');
 
 } else {

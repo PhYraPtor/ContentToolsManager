@@ -15,7 +15,7 @@ if (!empty($_SESSION['username'])) {
 </head>
 <body>
 <section class="login-form-container">
-	<form class="login-form" action="auth.php" method="post">
+	<form class="login-form" action="scripts/auth.php" method="post">
 		<h1>Connexion</h1>
 		<input id="identifiant" name="login" type="text" placeholder="Identifiant ou mail">
 		<input id="password" type="password" name="password" placeholder="Mot de passe">

@@ -12,10 +12,10 @@ session_start();
 <body>
 <header>
     <nav>
-        <a href="/">Admin</a>
-        <a href="#">Pages</a>
-        <a href="#">Utilisateurs</a>
-        <a href="#">Ajouter un utilisateur</a>
+        <a href="/admin/admin.php">Admin</a>
+        <a href="/admin/admin.php?view=pages-admin">Pages</a>
+        <a href="/admin/admin.php?view=user-list">Utilisateurs</a>
+        <a href="/admin/admin.php?view=add-user-form">Ajouter un utilisateur</a>
         <a href="#">Paramètres du site</a>
     </nav>
 </header>

@@ -4,7 +4,7 @@ if (isset($_POST['login']) && !empty($_POST['login']) && !empty($_POST['password
     $login = $_POST['login'];
     $password = $_POST['password'];
     // $password = password_hash($password, PASSWORD_DEFAULT);
-    require('../db-config.php');
+    require('../../db-config.php');
     $r = $dbh->prepare('SELECT id, password, username, mail, role FROM users WHERE( username = ? OR mail = ?)');
     $r->execute([$login, $login]);
     $creds = $r->fetchAll();
@@ -16,9 +16,8 @@ if (isset($_POST['login']) && !empty($_POST['login']) && !empty($_POST['password
             $_SESSION['username'] = $creds[0]['username'];
             $_SESSION['role'] = $creds[0]['role'];
             $host = $_SERVER['HTTP_HOST'];
-            $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
             $extra = 'admin.php';
-            header('Location: http://'.$host.$uri.'/'.$extra);
+            header('Location: http://'.$host.'/admin/'.$extra);
             exit();
         } else {
             // Mauvais mot de passe
