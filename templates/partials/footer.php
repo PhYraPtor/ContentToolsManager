@@ -30,8 +30,8 @@
 
     });
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/ContentTools@1.6.1/build/content-tools.min.js"></script>
+<?php if (isset($GLOBALS['dev']) && $GLOBALS['dev'] == true): ?>
+<script src="../../assets/js/content-tools.js"></script>
 <script
 	src="https://code.jquery.com/jquery-3.4.1.min.js"
 	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -39,6 +39,7 @@
 </script>
 
 <script src="../../assets/js/ct-index.js"></script>
+<?php endif ?>
 
 </body>
 </html>
