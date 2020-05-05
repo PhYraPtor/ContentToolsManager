@@ -36,7 +36,7 @@ $pages = $r->fetchAll();
             echo'<td>'.$page['template'].'</td>';
             echo'<td>'.$page['created'].'</td>';
             echo'<td>'.$page['modified'].'</td>';
-            echo'<td><a class="btn-flat orange" href="/admin/admin.php?view=edit-page-settings&id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '&prettyTitle='. $page['pretty_title'].'">Modifier le titre</a><a class="btn-flat green" href="/ctm-render.php?title='.$page['title'].'&preview=true">Editer la page</a><a class="btn-flat blue" href="/ctm-render.php?title='.$page['title'].'">Visualiser la page</a></td>';
+            echo'<td><a class="btn-flat orange" href="/admin/admin.php?view=edit-page-settings&id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '&prettyTitle='. $page['pretty_title'].'">Modifier le titre</a><a class="btn-flat green" href="/ctm-render.php?page='.$page['title'].'&preview=true">Editer la page</a><a class="btn-flat blue" href="/ctm-render.php?page='.$page['title'].'">Visualiser la page</a></td>';
         echo '</tr>';
     }
     ?>
