@@ -37,12 +37,10 @@ window.addEventListener('load', function() {
         var arr = [];
         for (name in regions) {
             if (regions.hasOwnProperty(name)) {
-                console.log("La région s'appelle : " + name + " et la valeur est : " + regions[name]);
                 arr.push(JSON.stringify({
                     nomDuChamp : name,
                     valeur : regions[name]
                 }));
-                console.log(arr);
             }
         }
 
@@ -59,7 +57,6 @@ window.addEventListener('load', function() {
                 editor.busy(false);
                 if (ev.target.status == '200') {
                     // Save was successful, notify the user with a flash
-                    console.log(JSON.parse(ev.target.responseText));
 
                     new ContentTools.FlashUI('ok');
                 } else {
@@ -248,7 +245,7 @@ function imageUploader(dialog) {
 
                 response.size = JSON.parse("[" + response.size + "]");
 
-                let imageSrc = response.url + '?' + Math.random();
+                // let imageSrc = response.url + '?' + Math.random();
                 let focused = ContentEdit.Root.get().focused();
                 let oldAttributes = {};
                 for (let key in focused._attributes) {
@@ -258,7 +255,7 @@ function imageUploader(dialog) {
                 delete oldAttributes['srcset'];
 
 
-                dialog.save(imageSrc, response.size[0]);
+                dialog.save(response.url, response.size[0]);
 
                 if (focused.type() === 'Image') {
                     focused.parent().detach(focused);

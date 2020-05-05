@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL & ~E_NOTICE);
+
 
 if (isset($_POST['data']) && !empty($_POST['data'])) {
     $data = json_decode($_POST['data']);
@@ -29,21 +31,8 @@ if (isset($_POST['data']) && !empty($_POST['data'])) {
                     $u->execute([$f->valeur, $fieldExists['id']]);
                 } else {
                     // Le champ n'existe pas, on l'insère
-                    try {
-                        $i = $dbh->prepare('INSERT INTO fields_dev(page, field, content, created, modified) VALUES (?,?,?,NOW(),NOW())');
-                        $i->execute([$pageInDb[0]['id'], $f->nomDuChamp, $f->valeur]);
-                        header('Content-Type: application/json');
-                        echo json_encode([
-                            "status" => 200,
-                            "message" => 'Normalement c\'est bon : ' . [$pageInDb[0]['id'], $f->nomDuChamp, $f->valeur]
-                        ]);
-                    } catch (Exception $e) {
-                        header('Content-Type: application/json');
-                        echo json_encode([
-                            "status" => 505,
-                            "message" => $e
-                        ]);
-                    }
+                    $i = $dbh->prepare('INSERT INTO fields_dev(page, field, content, created, updated) VALUES (?,?,?,NOW(),NOW())');
+                    $i->execute([$pageInDb[0]['id'], $f->nomDuChamp, $f->valeur]);
                 }
             }
 
