@@ -3,7 +3,7 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
     $page = $_GET['page'];
     if(is_string($page)) {
         $dbh = new PDO('mysql:host=robinoelou.mysql.db;dbname=robinoelou', 'robinoelou', '87HsEKcf9LAHTfM');
-        $r = $dbh->prepare('SELECT id, template FROM pages WHERE title = ? LIMIT 1');
+        $r = $dbh->prepare('SELECT id, template, pretty_title FROM pages WHERE title = ? LIMIT 1');
         $r->execute([$page]);
         $res = $r->fetchAll();
         if ($res && !empty($res)) {

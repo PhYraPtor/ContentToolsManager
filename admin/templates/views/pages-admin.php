@@ -17,7 +17,8 @@ $pages = $r->fetchAll();
     <thead>
     <tr>
         <th>ID</th>
-        <th>Titre</th>
+        <th>Slug</th>
+	      <th>Titre</th>
         <th>Template</th>
         <th>Créé</th>
         <th>Modifié</th>
@@ -30,10 +31,11 @@ $pages = $r->fetchAll();
         echo '<tr>';
             echo'<td>'.$page['id'].'</td>';
             echo'<td>'.$page['title'].'</td>';
+            echo'<td>'.$page['pretty_title'].'</td>';
             echo'<td>'.$page['template'].'</td>';
             echo'<td>'.$page['created'].'</td>';
             echo'<td>'.$page['modified'].'</td>';
-            echo'<td><a href="edit-page-settings.php?id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '">Modifier</a></td>';
+            echo'<td><a href="/admin/admin.php?view=edit-page-settings&id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '&prettyTitle='. $page['pretty_title'].'">Modifier</a></td>';
         echo '</tr>';
     }
     ?>
