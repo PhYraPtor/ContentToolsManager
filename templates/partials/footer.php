@@ -37,7 +37,7 @@
 	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 	crossorigin="anonymous">
 </script>
-
+<script src="../../assets/js/image-uploader.js"></script>
 <script src="../../assets/js/ct-index.js"></script>
 <?php endif ?>
 
