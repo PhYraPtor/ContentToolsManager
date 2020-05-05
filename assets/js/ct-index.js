@@ -249,6 +249,35 @@ function imageUploader(dialog) {
                 console.log(response);
 
                 response.size = JSON.parse("[" + response.size + "]");
+
+                let imageSrc = response.url + '?' + Math.random();
+                let focused = ContentEdit.Root.get().focused();
+                let oldAttributes = {};
+                for (let key in focused._attributes) {
+                    oldAttributes[key] = focused._attributes[key]
+                }
+                delete oldAttributes['src'];
+                delete oldAttributes['srcset'];
+
+
+                this._dialog.save(imageSrc, response.size[0]);
+
+                if (focused.type() === 'Image') {
+                    focused.parent().detach(focused);
+                    setTimeout(() => {
+                        let newFocused = ContentEdit.Root.get().focused();
+
+                        for (let key in oldAttributes) {
+                            newFocused._attributes[key] = oldAttributes[key];
+                        }
+                        if (!oldAttributes.width) {
+                            delete newFocused._attributes['width'];
+                        }
+                        if (!oldAttributes.height) {
+                            delete newFocused._attributes['height'];
+                        }
+                    }, 10);
+                }
                 
                 // Trigger the save event against the dialog with details of the
                 // image to be inserted.
