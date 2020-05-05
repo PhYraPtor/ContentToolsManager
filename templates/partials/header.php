@@ -5,6 +5,8 @@ function editable()
     if (isset($GLOBALS['dev']) && $GLOBALS['dev'] == true) {
         echo "data-editable";
     }
+
+    //TODO Ajouter le data name plus facilement
 }
 
 ?>
