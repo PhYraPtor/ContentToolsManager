@@ -10407,14 +10407,14 @@
                     var detail, image, imageAttrs, imageSize, imageURL, index, node, _ref;
                     detail = ev.detail();
                     imageURL = detail.imageURL;
-                    imageSize = detail.imageSize;
+                    // imageSize = detail.imageSize;
                     imageAttrs = detail.imageAttrs;
                     if (!imageAttrs) {
                         imageAttrs = {};
                     }
-                    imageAttrs.height = imageSize[1];
+                    // imageAttrs.height = imageSize[1];
                     imageAttrs.src = imageURL;
-                    imageAttrs.width = imageSize[0];
+                    // imageAttrs.width = imageSize[0];
                     if (element.type() === 'ImageFixture') {
                         element.src(imageURL);
                     } else {

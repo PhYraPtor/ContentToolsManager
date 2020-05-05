@@ -260,34 +260,25 @@ function imageUploader(dialog) {
                 delete oldAttributes['srcset'];
 
 
-                this._dialog.save(imageSrc, response.size[0]);
+                dialog.save(imageSrc, response.size[0]);
 
                 if (focused.type() === 'Image') {
                     focused.parent().detach(focused);
                     setTimeout(() => {
                         let newFocused = ContentEdit.Root.get().focused();
 
-                        for (let key in oldAttributes) {
-                            newFocused._attributes[key] = oldAttributes[key];
-                        }
+                        // for (let key in oldAttributes) {
+                        //     newFocused._attributes[key] = oldAttributes[key];
+                        // }
                         if (!oldAttributes.width) {
                             delete newFocused._attributes['width'];
                         }
                         if (!oldAttributes.height) {
                             delete newFocused._attributes['height'];
                         }
+                        newFocused._attributes['alt'] = response.alt;
                     }, 10);
                 }
-                
-                // Trigger the save event against the dialog with details of the
-                // image to be inserted.
-                dialog.save(
-                    response.url,
-                    response.size[0],
-                    {
-                        'alt': response.alt,
-                        'data-ce-max-width': response.size[0][0]
-                    });
 
             } else {
                 // The request failed, notify the user
