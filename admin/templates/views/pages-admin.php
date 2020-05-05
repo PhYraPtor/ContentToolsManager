@@ -13,7 +13,7 @@ $pages = $r->fetchAll();
 	<title>Administration des pages</title>
 </head>
 <body>
-<table>
+<table class="flat-table">
     <thead>
     <tr>
         <th>ID</th>
@@ -22,7 +22,7 @@ $pages = $r->fetchAll();
         <th>Template</th>
         <th>Créé</th>
         <th>Modifié</th>
-        <th>Éditer</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -35,9 +35,7 @@ $pages = $r->fetchAll();
             echo'<td>'.$page['template'].'</td>';
             echo'<td>'.$page['created'].'</td>';
             echo'<td>'.$page['modified'].'</td>';
-            echo'<td><a href="/admin/admin.php?view=edit-page-settings&id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '&prettyTitle='. $page['pretty_title'].'">Modifier</a></td>';
-            echo'<td><a href="/ctm-render.php?title='.$page['title'].'&preview=true">Editer</a></td>';
-            echo'<td><a href="/ctm-render.php?title='.$page['title'].'">Visualiser</a></td>';
+            echo'<td><a class="btn-flat orange" href="/admin/admin.php?view=edit-page-settings&id='.$page['id'].'&title='.$page['title']. '&template=' . $page['template'] . '&prettyTitle='. $page['pretty_title'].'">Modifier le titre</a><a class="btn-flat green" href="/ctm-render.php?title='.$page['title'].'&preview=true">Editer la page</a><a class="btn-flat blue" href="/ctm-render.php?title='.$page['title'].'">Visualiser la page</a></td>';
         echo '</tr>';
     }
     ?>

@@ -7,8 +7,6 @@ function editable($name)
     }
 
     echo 'data-name="'. $name .'"';
-
-    //TODO Ajouter le data name plus facilement
 }
 
 ?>
