@@ -244,9 +244,7 @@ function imageUploader(dialog) {
             // Handle the result of the rotation
             if (parseInt(ev.target.status) === 200) {
                 // Unpack the response (from JSON)
-                console.log(ev.target.responseText);
                 var response = JSON.parse(ev.target.responseText);
-                console.log(response);
 
                 response.size = JSON.parse("[" + response.size + "]");
 
