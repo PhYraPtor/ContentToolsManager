@@ -30,7 +30,7 @@
 							<div data-editable data-name="header_text">
 								<p>Je suis <strong>Antoine Bonin</strong>, j'ai 19 ans et je suis actuellement en 2ème année de Bachelor chef de projet web à Digital Campus à Lyon.<br>J'ai suivi un parcours toujours orienté vers la <strong>technologie</strong> et le <strong>multimédia</strong>, en commençant par l'obtention d'un baccalauréat scientifique option ISN ( Informatique et Science du Numérique ) qui m'a permis d'accéder très tôt au monde du digital.<br>Déjà en 3ème, lors de mon stage obligatoire en entreprise, j'ai mis un pied dans le vaste monde du numérique. Simple observateur dans une petite <strong>agence de communication</strong> près de chez moi, cela m'a réconforté dans mon parcours post bac.<br>Une fois mon bac en poche, je suis rentré chez Digital Campus. Ici j'ai pu acquérir de nouvelles compétences ainsi qu'étoffer celles acquises de manière <strong>autodidacte</strong>. Par la suite j'ai fait un stage de 4 mois dans un magasin de vélo et scooter électrique en tant que <strong>producteur vidéo</strong>.</p>
 							</div>
-							<span class="image main" data-editable data-name="header_img"><img src="images/50882552_382637452294903_293874354020679680_o.jpg" alt="" /></span>
+							<span class="image main" data-editable data-name="header_img"><?php echo $fields['header_img'] ?></span>
 						</div>
 					</section>
 
