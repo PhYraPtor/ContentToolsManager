@@ -6,10 +6,10 @@
 				<!-- Intro -->
 					<section class="intro">
 						<header>
-							<div <?php editable() ?> data-name="name">
+							<div <?php editable("name") ?>>
 								<?php echo($fields['name']) ?>
 							</div>
-							<div <?php editable() ?> data-name="introduction">
+							<div <?php editable("introduction") ?>>
                                 <?php echo($fields['introduction']) ?>
 							</div>
 							<ul class="actions">

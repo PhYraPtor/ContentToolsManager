@@ -1,10 +1,12 @@
 <?php
 
-function editable()
+function editable($name)
 {
     if (isset($GLOBALS['dev']) && $GLOBALS['dev'] == true) {
-        echo "data-editable";
+        echo "data-editable ";
     }
+
+    echo 'data-name="'. $name .'"';
 
     //TODO Ajouter le data name plus facilement
 }
